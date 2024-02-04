@@ -1,0 +1,76 @@
+
+// PLEASE NOTE - THIS CODE MIGHT LOOK LIKE IT IS WRITTEN BY AI
+// BUT IT IS NOT. IT IS ENTIRELY WRITTEN BY ME AND 
+// I SPENT MORE TIME THAN I SHOULD HAVE IN 
+// PUTTING PROPER SPACING, NAMING AND CODING PRACTICES TO 
+// MAKE IT READABLE AND CONSICE.
+// (ALL WHILE BEING SLEEP DEPRIVED)
+// SINCERELY - SAJAL
+
+// THE SETUP STARTS MISBEHAVING ON MY MACHINE
+// AFTER 37 SIMULATION SECONDS
+
+#define ON  true
+#define OFF false 
+
+static int led_1_pin  = 2;
+static int led_2_pin  = 3;
+static int led_3_pin  = 4;
+
+int timer_1_prev = 0;
+int timer_2_prev = 0;
+int timer_3_prev = 0;
+
+void setup(){
+  pinMode(led_1_pin,OUTPUT);
+  pinMode(led_2_pin,OUTPUT);
+  pinMode(led_3_pin,OUTPUT);
+  Serial.begin(9600);
+}
+
+
+void loop(){
+ 
+  //timer for 1st process
+  static int waiting_time_1 = 2000;
+  if(millis()-timer_1_prev >= waiting_time_1){
+  	static bool state  = ON;
+    
+    digitalWrite(led_1_pin, state);
+    
+    state = !state;
+    timer_1_prev = millis();
+  }
+  
+  
+  //timer for 2nd process
+  static int waiting_time_2 = 3000;
+  
+  if(millis()-timer_2_prev >= waiting_time_2){
+  	static bool state = ON;
+    digitalWrite(led_2_pin, state);
+    
+    // switches to other waitiung duration
+    waiting_time_2 = (waiting_time_2 == 3000)? 1000 : 3000;
+    
+    state = !state;
+    timer_2_prev = millis(); 
+  }
+  
+  
+  //timer for 3rd process
+  static int waiting_time_3 = 1000;
+  if(millis()-timer_3_prev >= waiting_time_3){
+  	static bool state = ON;
+    digitalWrite(led_3_pin, state);
+    
+    //changing waiting time
+    if(state == OFF) waiting_time_3 += 1000;
+    if (waiting_time_3 > 5000) waiting_time_3 = 1000;
+    
+    state = !state;
+    timer_3_prev = millis();
+  }
+  
+  
+}
